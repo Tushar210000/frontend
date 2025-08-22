@@ -1262,6 +1262,636 @@
 //////////////////////////////////////////////
 
 
+// import React, { useState, useEffect } from "react";
+// import { Link, useNavigate, useLocation } from "react-router-dom";
+// import { useAuth } from "./AuthContext";
+// import axios from "axios";
+
+// export default function Header() {
+//   const { user, logout, login } = useAuth();
+//   const [phone, setPhone] = useState("");
+//   const [employeeId, setEmployeeId] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [role, setRole] = useState("user"); // role selector
+//   const [showPassword, setShowPassword] = useState(false);
+//   const navigate = useNavigate();
+//   const location = useLocation();
+
+//   // Remove Bootstrap modal backdrops
+//   const removeModalBackdrop = () => {
+//     const backdrops = document.querySelectorAll(".modal-backdrop");
+//     backdrops.forEach((backdrop) => backdrop.remove());
+//     document.body.classList.remove("modal-open");
+//     document.body.style = "";
+//   };
+
+//   useEffect(() => {
+//     removeModalBackdrop();
+//   }, [location.pathname]);
+
+//   // Login Handler
+//   // const handleLogin = async (e) => {
+//   //   e.preventDefault();
+
+//   //   if (role === "user") {
+//   //     if (!phone || !password) {
+//   //       alert("Please enter phone and password");
+//   //       return;
+//   //     }
+//   //     const result = await login(phone, password, role); // send role
+//   //     if (result.success) {
+//   //       const loginModalElement = document.getElementById("loginModal");
+//   //       const loginModal = window.bootstrap.Modal.getInstance(loginModalElement);
+//   //       if (loginModal) loginModal.hide();
+//   //       navigate("/");
+//   //     } else {
+//   //       alert(result.error);
+//   //     }
+//   //   } else if (role === "employee") {
+//   //     if (!employeeId || !password) {
+//   //       alert("Please enter employee ID and password");
+//   //       return;
+//   //     }
+//   //     try {
+//   //       const response = await axios.post(
+//   //         "https://ruwa-back-2.onrender.com/api/auth/login",
+//   //         {
+//   //           employeeId,
+//   //           password,
+//   //         }
+//   //       );
+//   //       if (response.data.token) {
+//   //         localStorage.setItem("token", response.data.token);
+//   //         alert("Employee login successful");
+//   //         const loginModalElement = document.getElementById("loginModal");
+//   //         const loginModal =
+//   //           window.bootstrap.Modal.getInstance(loginModalElement);
+//   //         if (loginModal) loginModal.hide();
+//   //         navigate("/employee-dashboard");
+//   //       }
+//   //     } catch (err) {
+//   //       alert(err.response?.data?.message || "Employee login failed");
+//   //     }
+//   //   }
+//   // };
+//   const handleLogin = async (e) => {
+//   e.preventDefault();
+
+//   if (!password || (!phone && !employeeId)) {
+//     alert("Please fill in all required fields");
+//     return;
+//   }
+
+//   try {
+//     const payload =
+//       role === "user"
+//         ? { phone, password }
+//         : { employeeId, password };
+
+//     const response = await axios.post(
+//       "https://ruwa-back-2.onrender.com/api/auth/login",
+//       payload
+//     );
+
+//     if (response.data.token) {
+//       localStorage.setItem("token", response.data.token);
+
+//       // Determine redirect based on backend role
+//       const userRole = response.data.role; // make sure your backend returns role
+//       if (userRole === "EMPLOYEE") {
+//         alert("Employee login successful");
+//         const loginModalElement = document.getElementById("loginModal");
+//         const loginModal = window.bootstrap.Modal.getInstance(loginModalElement);
+//         if (loginModal) loginModal.hide();
+//         navigate("/employee-dashboard");
+//       } else {
+//         alert("Login successful");
+//         const loginModalElement = document.getElementById("loginModal");
+//         const loginModal = window.bootstrap.Modal.getInstance(loginModalElement);
+//         if (loginModal) loginModal.hide();
+//         navigate("/");
+//       }
+//     }
+//   } catch (err) {
+//     alert(err.response?.data?.message || "Login failed");
+//   }
+// };
+
+//   const handleLogout = () => {
+//     const confirmed = window.confirm("Are you sure you want to log out?");
+//     if (confirmed) {
+//       logout();
+//       alert("Logged out successfully.");
+//     }
+//   };
+
+//   const closeOffcanvas = () => {
+//     const offcanvasElement = document.getElementById("fbs__net-navbars");
+//     const offcanvasInstance =
+//       window.bootstrap?.Offcanvas.getInstance(offcanvasElement);
+//     if (offcanvasInstance) offcanvasInstance.hide();
+//   };
+
+//   // Register
+//   const [registerData, setRegisterData] = useState({
+//     name: "",
+//     phone: "",
+//     password: "",
+//     confirmPassword: "",
+//     age: "",
+//   });
+
+//   const handleRegisterChange = (e) => {
+//     const { name, value } = e.target;
+//     setRegisterData((prev) => ({ ...prev, [name]: value }));
+//   };
+
+//   const handleRegisterSubmit = async (e) => {
+//     e.preventDefault();
+
+//     if (registerData.password !== registerData.confirmPassword) {
+//       alert("Passwords do not match!");
+//       return;
+//     }
+
+//     try {
+//       const response = await axios.post(
+//         "https://ruwa-back-2.onrender.com/api/auth/register",
+//         {
+//           name: registerData.name,
+//           phone: registerData.phone,
+//           password: registerData.password,
+//           age: registerData.age,
+//           role: "user", // always user
+//         }
+//       );
+
+//       if (response.data.token) {
+//         alert("Registered Successfully!");
+//         const registerModalElement = document.getElementById("registerModal");
+//         const registerModal =
+//           window.bootstrap.Modal.getInstance(registerModalElement);
+//         if (registerModal) registerModal.hide();
+
+//         removeModalBackdrop();
+//         const loginModal = new window.bootstrap.Modal(
+//           document.getElementById("loginModal")
+//         );
+//         loginModal.show();
+//       }
+//     } catch (error) {
+//       alert(error.response?.data?.message || "Registration failed");
+//     }
+//   };
+
+//   return (
+//     <>
+//       <header className="fbs__net-navbar navbar bg-light navbar-expand-lg dark">
+//         <div className="container d-flex align-items-center justify-content-between">
+//           {/* Logo */}
+//           <Link className="navbar-brand w-auto" to="/">
+//             <img
+//               className="logo dark img-fluid d-lg-none"
+//               src="\assets\images\logowithoutbg.png"
+//               alt="Ruwa India Logo"
+//               style={{ height: "50px" }}
+//             />
+//             <img
+//               className="logo dark img-fluid d-none d-lg-block"
+//               src="\assets\images\logowithoutbg.png"
+//               alt="Ruwa India Logo"
+//               style={{ height: "70px" }}
+//             />
+//           </Link>
+
+//           {/* Offcanvas Menu */}
+//           <div
+//             className="offcanvas offcanvas-start w-75"
+//             id="fbs__net-navbars"
+//             tabIndex="-1"
+//           >
+//             <div className="offcanvas-header justify-content-between align-items-center">
+//               {user ? (
+//                 <div className="d-flex align-items-center gap-2">
+//                   <img
+//                     src={
+//                       user.profilePic ||
+//                       "https://randomuser.me/api/portraits/men/75.jpg"
+//                     }
+//                     alt="User"
+//                     style={{ width: 40, height: 40, borderRadius: "50%" }}
+//                   />
+//                   <strong className="text-dark">
+//                     {user.name
+//                       ? user.name.charAt(0).toUpperCase() + user.name.slice(1)
+//                       : "User"}
+//                   </strong>
+//                 </div>
+//               ) : (
+//                 <Link className="logo-link" id="fbs__net-navbarsLabel" to="/">
+//                   <img
+//                     className="logo dark img-fluid"
+//                     src="\assets\images\logowithoutbg.png"
+//                     alt="Ruwa India Logo"
+//                     style={{ height: "70px" }}
+//                   />
+//                 </Link>
+//               )}
+//               <button
+//                 className="btn-close btn-close-black ms-2"
+//                 type="button"
+//                 data-bs-dismiss="offcanvas"
+//                 aria-label="Close"
+//               ></button>
+//             </div>
+
+//             <div className="offcanvas-body align-items-lg-center">
+//               <ul className="navbar-nav nav me-auto ps-lg-5 mb-2 mb-lg-0">
+//                 <li className="nav-item fw-bold fs-2">
+//                   <Link
+//                     className="nav-link"
+//                     onClick={closeOffcanvas}
+//                     to="/"
+//                   >
+//                     Home
+//                   </Link>
+//                 </li>
+//                 <li className="nav-item fw-bold">
+//                   <Link
+//                     className="nav-link"
+//                     onClick={closeOffcanvas}
+//                     to="/about"
+//                   >
+//                     About Us
+//                   </Link>
+//                 </li>
+//                 <li className="nav-item fw-bold">
+//                   <Link
+//                     className="nav-link"
+//                     onClick={closeOffcanvas}
+//                     to="/services"
+//                   >
+//                     Services
+//                   </Link>
+//                 </li>
+//                 <li className="nav-item fw-bold">
+//                   <Link
+//                     className="nav-link"
+//                     onClick={closeOffcanvas}
+//                     to="/contact"
+//                   >
+//                     Contact
+//                   </Link>
+//                 </li>
+//               </ul>
+
+//               <div className="d-lg-none mt-3">
+//                 {!user ? (
+//                   <>
+//                     <button
+//                       className="btn btn-primary w-100 mb-2"
+//                       data-bs-toggle="modal"
+//                       onClick={closeOffcanvas}
+//                       data-bs-target="#registerModal"
+//                     >
+//                       Register
+//                     </button>
+//                     <button
+//                       className="btn btn-outline-dark w-100 mb-2"
+//                       data-bs-toggle="modal"
+//                       onClick={closeOffcanvas}
+//                       data-bs-target="#loginModal"
+//                     >
+//                       Login
+//                     </button>
+//                   </>
+//                 ) : (
+//                   <>
+//                     <Link
+//                       className="btn btn-outline-dark w-100 mb-2"
+//                       onClick={closeOffcanvas}
+//                       to="/profile"
+//                     >
+//                       My Profile
+//                     </Link>
+//                     <Link
+//                       className="btn btn-outline-dark w-100 mb-2"
+//                       onClick={closeOffcanvas}
+//                       to="/profilecard"
+//                     >
+//                       Card
+//                     </Link>
+//                     <button
+//                       className="btn btn-danger w-100"
+//                       onClick={handleLogout}
+//                     >
+//                       Logout
+//                     </button>
+//                   </>
+//                 )}
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* Desktop Right Buttons */}
+//           <div className="ms-auto w-auto d-none d-lg-flex">
+//             <div className="header-social d-flex align-items-center gap-2">
+//               {!user ? (
+//                 <>
+//                   <button
+//                     className="btn btn-primary py-2"
+//                     data-bs-toggle="modal"
+//                     data-bs-target="#registerModal"
+//                   >
+//                     Register
+//                   </button>
+//                   <button
+//                     className="btn btn-outline-light py-2"
+//                     data-bs-toggle="modal"
+//                     data-bs-target="#loginModal"
+//                   >
+//                     Login
+//                   </button>
+//                 </>
+//               ) : (
+//                 <div className="dropdown">
+//                   <button
+//                     className="btn btn-outline-light dropdown-toggle d-flex align-items-center"
+//                     id="profileDropdown"
+//                     data-bs-toggle="dropdown"
+//                   >
+//                     <img
+//                       src={
+//                         user.profilePic ||
+//                         "https://randomuser.me/api/portraits/men/75.jpg"
+//                       }
+//                       alt="avatar"
+//                       style={{
+//                         width: 30,
+//                         height: 30,
+//                         borderRadius: "50%",
+//                         marginRight: 8,
+//                       }}
+//                     />
+//                     {user.name
+//                       ? user.name.charAt(0).toUpperCase() + user.name.slice(1)
+//                       : "User"}
+//                   </button>
+//                   <ul className="dropdown-menu">
+//                     <li>
+//                       <Link className="dropdown-item" to="/profile">
+//                         My Profile
+//                       </Link>
+//                     </li>
+//                     <Link className="dropdown-item" to="/profilecard">
+//                       Card
+//                     </Link>
+//                     <li>
+//                       <button className="dropdown-item" onClick={handleLogout}>
+//                         Logout
+//                       </button>
+//                     </li>
+//                   </ul>
+//                 </div>
+//               )}
+//             </div>
+//           </div>
+
+//           {/* Toggle Button */}
+//           <button
+//             className="fbs__net-navbar-toggler ms-auto"
+//             data-bs-toggle="offcanvas"
+//             data-bs-target="#fbs__net-navbars"
+//           >
+//             <svg
+//               xmlns="http://www.w3.org/2000/svg"
+//               width="24"
+//               height="24"
+//               viewBox="0 0 24 24"
+//               fill="none"
+//               stroke="currentColor"
+//               strokeWidth="2"
+//               strokeLinecap="round"
+//               strokeLinejoin="round"
+//             >
+//               <line x1="21" x2="3" y1="6" y2="6"></line>
+//               <line x1="15" x2="3" y1="12" y2="12"></line>
+//               <line x1="17" x2="3" y1="18" y2="18"></line>
+//             </svg>
+//           </button>
+//         </div>
+//       </header>
+
+//       {/* Register Modal */}
+//       <div
+//         className="modal fade"
+//         id="registerModal"
+//         tabIndex="-1"
+//         aria-hidden="true"
+//       >
+//         <div className="modal-dialog modal-dialog-centered">
+//           <div className="modal-content">
+//             <div className="modal-header">
+//               <h5 className="modal-title">Register</h5>
+//               <button
+//                 type="button"
+//                 className="btn-close"
+//                 data-bs-dismiss="modal"
+//               ></button>
+//             </div>
+//             <div className="modal-body">
+//               <form onSubmit={handleRegisterSubmit}>
+//                 <input
+//                   type="text"
+//                   name="name"
+//                   className="form-control mb-2"
+//                   placeholder="Full Name"
+//                   value={registerData.name}
+//                   onChange={handleRegisterChange}
+//                   required
+//                 />
+//                 <input
+//                   type="tel"
+//                   name="phone"
+//                   className="form-control mb-2"
+//                   placeholder="Phone Number"
+//                   value={registerData.phone}
+//                   onChange={handleRegisterChange}
+//                   required
+//                 />
+//                 <input
+//                   type="number"
+//                   name="age"
+//                   className="form-control mb-2"
+//                   placeholder="Age"
+//                   value={registerData.age}
+//                   onChange={handleRegisterChange}
+//                   required
+//                 />
+//                 <input
+//                   type="password"
+//                   name="password"
+//                   className="form-control mb-2"
+//                   placeholder="Password"
+//                   value={registerData.password}
+//                   onChange={handleRegisterChange}
+//                   required
+//                 />
+//                 <input
+//                   type="password"
+//                   name="confirmPassword"
+//                   className="form-control mb-2"
+//                   placeholder="Confirm Password"
+//                   value={registerData.confirmPassword}
+//                   onChange={handleRegisterChange}
+//                   required
+//                 />
+//                 <button type="submit" className="btn btn-primary w-100">
+//                   Register
+//                 </button>
+//               </form>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Login Modal */}
+//       <div
+//         className="modal fade"
+//         id="loginModal"
+//         tabIndex="-1"
+//         aria-hidden="true"
+//       >
+//         <div className="modal-dialog modal-dialog-centered">
+//           <div className="modal-content">
+//             <div className="modal-header">
+//               <h5 className="modal-title">Login</h5>
+//               <button
+//                 type="button"
+//                 className="btn-close"
+//                 data-bs-dismiss="modal"
+//               ></button>
+//             </div>
+//             <div className="modal-body">
+//               <form onSubmit={handleLogin}>
+//                 {/* Role Selection */}
+//                 <select
+//                   className="form-select mb-3"
+//                   value={role}
+//                   onChange={(e) => setRole(e.target.value)}
+//                 >
+//                   <option value="user">User</option>
+//                   <option value="employee">Employee</option>
+//                 </select>
+
+//                 {/* User Fields */}
+//                 {role === "user" && (
+//                   <input
+//                     type="tel"
+//                     className="form-control mb-3"
+//                     placeholder="Phone Number"
+//                     value={phone}
+//                     onChange={(e) => setPhone(e.target.value)}
+//                   />
+//                 )}
+
+//                 {/* Employee Fields */}
+//                 {role === "employee" && (
+//                   <input
+//                     type="text"
+//                     className="form-control mb-3"
+//                     placeholder="Employee ID"
+//                     value={employeeId}
+//                     onChange={(e) => setEmployeeId(e.target.value)}
+//                   />
+//                 )}
+
+//                 {/* Password */}
+//                 <div className="mb-3 position-relative">
+//                   <input
+//                     type={showPassword ? "text" : "password"}
+//                     className="form-control"
+//                     placeholder="Password"
+//                     value={password}
+//                     onChange={(e) => setPassword(e.target.value)}
+//                     required
+//                   />
+//                   <i
+//                     className={`bi ${
+//                       showPassword ? "bi-eye-slash" : "bi-eye"
+//                     } position-absolute top-50 end-0 translate-middle-y me-3`}
+//                     onClick={() => setShowPassword(!showPassword)}
+//                     style={{ cursor: "pointer" }}
+//                   ></i>
+//                 </div>
+
+//                 <button type="submit" className="btn btn-primary w-100">
+//                   Login
+//                 </button>
+//               </form>
+
+//               <div className="text-center mt-3">
+//                 <p>
+//                   Don’t have an account?{" "}
+//                   <Link
+//                     data-bs-dismiss="modal"
+//                     data-bs-toggle="modal"
+//                     data-bs-target="#registerModal"
+//                   >
+//                     Register
+//                   </Link>
+//                 </p>
+//                 <p>
+//                   <Link
+//                     data-bs-dismiss="modal"
+//                     data-bs-toggle="modal"
+//                     data-bs-target="#forgotModal"
+//                   >
+//                     Forgot Password?
+//                   </Link>
+//                 </p>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Forgot Password Modal */}
+//       <div
+//         className="modal fade"
+//         id="forgotModal"
+//         tabIndex="-1"
+//         aria-hidden="true"
+//       >
+//         <div className="modal-dialog modal-dialog-centered">
+//           <div className="modal-content">
+//             <div className="modal-header">
+//               <h5 className="modal-title">Forgot Password</h5>
+//               <button
+//                 type="button"
+//                 className="btn-close"
+//                 data-bs-dismiss="modal"
+//               ></button>
+//             </div>
+//             <div className="modal-body">
+//               <form>
+//                 <input
+//                   type="text"
+//                   className="form-control mb-3"
+//                   placeholder="Email or phone number"
+//                 />
+//                 <button type="submit" className="btn btn-primary w-100">
+//                   Reset Password
+//                 </button>
+//               </form>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </>
+//   );
+// }
+
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "./AuthContext";
@@ -1290,92 +1920,50 @@ export default function Header() {
   }, [location.pathname]);
 
   // Login Handler
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
-
-  //   if (role === "user") {
-  //     if (!phone || !password) {
-  //       alert("Please enter phone and password");
-  //       return;
-  //     }
-  //     const result = await login(phone, password, role); // send role
-  //     if (result.success) {
-  //       const loginModalElement = document.getElementById("loginModal");
-  //       const loginModal = window.bootstrap.Modal.getInstance(loginModalElement);
-  //       if (loginModal) loginModal.hide();
-  //       navigate("/");
-  //     } else {
-  //       alert(result.error);
-  //     }
-  //   } else if (role === "employee") {
-  //     if (!employeeId || !password) {
-  //       alert("Please enter employee ID and password");
-  //       return;
-  //     }
-  //     try {
-  //       const response = await axios.post(
-  //         "https://ruwa-back-2.onrender.com/api/auth/login",
-  //         {
-  //           employeeId,
-  //           password,
-  //         }
-  //       );
-  //       if (response.data.token) {
-  //         localStorage.setItem("token", response.data.token);
-  //         alert("Employee login successful");
-  //         const loginModalElement = document.getElementById("loginModal");
-  //         const loginModal =
-  //           window.bootstrap.Modal.getInstance(loginModalElement);
-  //         if (loginModal) loginModal.hide();
-  //         navigate("/employee-dashboard");
-  //       }
-  //     } catch (err) {
-  //       alert(err.response?.data?.message || "Employee login failed");
-  //     }
-  //   }
-  // };
   const handleLogin = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!password || (!phone && !employeeId)) {
-    alert("Please fill in all required fields");
-    return;
-  }
-
-  try {
-    const payload =
-      role === "user"
-        ? { phone, password }
-        : { employeeId, password };
-
-    const response = await axios.post(
-      "https://ruwa-back-2.onrender.com/api/auth/login",
-      payload
-    );
-
-    if (response.data.token) {
-      localStorage.setItem("token", response.data.token);
-
-      // Determine redirect based on backend role
-      const userRole = response.data.role; // make sure your backend returns role
-      if (userRole === "EMPLOYEE") {
-        alert("Employee login successful");
-        const loginModalElement = document.getElementById("loginModal");
-        const loginModal = window.bootstrap.Modal.getInstance(loginModalElement);
-        if (loginModal) loginModal.hide();
-        navigate("/employee-dashboard");
-      } else {
-        alert("Login successful");
+    if (role === "user") {
+      if (!phone || !password) {
+        alert("Please enter phone and password");
+        return;
+      }
+      const result = await login(phone, password, role); // send role
+      if (result.success) {
         const loginModalElement = document.getElementById("loginModal");
         const loginModal = window.bootstrap.Modal.getInstance(loginModalElement);
         if (loginModal) loginModal.hide();
         navigate("/");
+      } else {
+        alert(result.error);
+      }
+    } else if (role === "employee") {
+      if (!employeeId || !password) {
+        alert("Please enter employee ID and password");
+        return;
+      }
+      try {
+        const response = await axios.post(
+          "http://localhost:8000/api/auth/employee-login",
+          {
+            employeeId,
+            password,
+          }
+        );
+        if (response.data.token) {
+          localStorage.setItem("token", response.data.token);
+          alert("Employee login successful");
+          const loginModalElement = document.getElementById("loginModal");
+          const loginModal =
+            window.bootstrap.Modal.getInstance(loginModalElement);
+          if (loginModal) loginModal.hide();
+          navigate("/employee-dashboard");
+        }
+      } catch (err) {
+        alert(err.response?.data?.message || "Employee login failed");
       }
     }
-  } catch (err) {
-    alert(err.response?.data?.message || "Login failed");
-  }
-};
+  };
 
   const handleLogout = () => {
     const confirmed = window.confirm("Are you sure you want to log out?");
@@ -1416,7 +2004,7 @@ export default function Header() {
 
     try {
       const response = await axios.post(
-        "https://ruwa-back-2.onrender.com/api/auth/register",
+        "http://localhost:8000/api/auth/register",
         {
           name: registerData.name,
           phone: registerData.phone,
