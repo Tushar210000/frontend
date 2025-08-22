@@ -1944,7 +1944,7 @@ export default function Header() {
       }
       try {
         const response = await axios.post(
-          "http://localhost:8000/api/auth/employee-login",
+          "https://ruwa-back-2.onrender.com/api/auth/employee-login",
           {
             employeeId,
             password,
@@ -2004,7 +2004,7 @@ export default function Header() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/auth/register",
+        "https://ruwa-back-2.onrender.com/api/auth/register",
         {
           name: registerData.name,
           phone: registerData.phone,

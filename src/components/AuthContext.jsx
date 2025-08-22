@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }) => {
   // Function to get the user profile
   const getProfile = async (token) => {
     try {
-      const response = await axios.get('http://localhost:8000/api/auth/profile', {
+      const response = await axios.get('https://ruwa-back-2.onrender.com/api/auth/profile', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -116,7 +116,7 @@ export const AuthProvider = ({ children }) => {
   // Function to handle login
   const login = async (phone, password) => {
     try {
-      const response = await axios.post('http://localhost:8000/api/auth/login', {
+      const response = await axios.post('https://ruwa-back-2.onrender.com/api/auth/login', {
         phone,
         password,
       });
