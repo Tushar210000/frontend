@@ -174,7 +174,6 @@ import Swvimanyojna from './Pages/Swvimanyojna';
 import Arogycard from './Pages/Arogycard';
 import { AuthProvider, useAuth } from './components/AuthContext';
 import ModalForm from './components/ModalForm';
-// import Resigter from './components/Resigter';
 import AmbilancePage from './Pages/AmbilancePage';
 import InsurancePage from './Pages/InsurancePage';
 import TermsConditionsPage from './Pages/TermsConditionsPage';
@@ -192,10 +191,19 @@ import RegisterPage from './Pages/RegisterPage';
 import ComingSoonPage from './Pages/ComingSoonPage';
 import CareerPage from './Pages/CareerPage';
 import FeedbackPage from './Pages/FeedbackPage';
+
+// Import Employee Pages (you'll need to create these)
+import EmployeeDashboard from './Pages/EmployeeDashboard';
+import EmployeeProfile from './Pages/EmployeeProfile';
+import ManageUsers from './Pages/ManageUsers';
+// import ManageApplications from './Pages/Employee/ManageApplications';
+// import Reports from './Pages/Employee/Reports';
+// import Settings from './Pages/Employee/Settings';
+
 import Swal from 'sweetalert2';
 import { useEffect, useState } from 'react';
 
-// ✅ Scroll to top component
+// Scroll to top component
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -219,37 +227,55 @@ export default function Main() {
     }
   }, []);
 
-  // ✅ Updated ProtectedRoute to avoid background flash
+  // User Protected Route
   function ProtectedRoute({ children }) {
     const { user, loading } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
-      if (!loading && !user) {
+      if (!loading && (!user || user.role !== "USER")) {
         Swal.fire({
-          icon: 'warning',
-          title: 'Login Required',
-          text: 'Please login to continue',
-          confirmButtonText: 'OK'
+          icon: "warning",
+          title: "Access Denied",
+          text: "Please login with a user account to continue",
+          confirmButtonText: "OK",
         }).then(() => {
-          navigate('/', { replace: true });
+          navigate("/", { replace: true });
         });
       }
     }, [loading, user, navigate]);
 
     if (loading) return <div>Loading...</div>;
 
-    // Keep children rendered but hidden until auth checked & alert shown
-    if (!user) {
-      return <div style={{ visibility: 'hidden' }}>{children}</div>;
-    }
+    return user?.role === "USER" ? children : null;
+  }
 
-    return children;
+  // Employee Protected Route
+  function EmployeeProtectedRoute({ children }) {
+    const { user, loading } = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      if (!loading && (!user || user.role !== "EMPLOYEE")) {
+        Swal.fire({
+          icon: "warning",
+          title: "Access Denied",
+          text: "Employee login required to access this page",
+          confirmButtonText: "OK",
+        }).then(() => {
+          navigate("/", { replace: true });
+        });
+      }
+    }, [loading, user, navigate]);
+
+    if (loading) return <div>Loading...</div>;
+
+    return user?.role === "EMPLOYEE" ? children : null;
   }
 
   return (
     <BrowserRouter>
-      <ScrollToTop /> {/* 🔹 Scroll to top on page change */}
+      <ScrollToTop />
       <AuthProvider>
         <ModalForm isOpen={showModal} onClose={() => setShowModal(false)} />
         <Header />
@@ -272,8 +298,9 @@ export default function Main() {
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/forgot-password' element={<ForgotPass />} />
           <Route path='/comingsoon' element={<ComingSoonPage />} />
+          <Route path='/feedback' element={<FeedbackPage />} />
 
-          {/* Protected Routes */}
+          {/* User Protected Routes */}
           <Route path='/profile' element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
           <Route path='/profilecard' element={<ProtectedRoute><Arogaycardpage /></ProtectedRoute>} />
           <Route path='/apply-swabhiman' element={<ProtectedRoute><Swvimanyojna /></ProtectedRoute>} />
@@ -285,6 +312,14 @@ export default function Main() {
           <Route path='/apply-kendrform' element={<ProtectedRoute><KendraformPage /></ProtectedRoute>} />
           <Route path='/career' element={<ProtectedRoute><CareerPage /></ProtectedRoute>} />
           <Route path='/feedback' element={<ProtectedRoute><FeedbackPage /></ProtectedRoute>} />
+
+          {/* Employee Protected Routes */}
+          <Route path='/employee-dashboard' element={<EmployeeProtectedRoute><EmployeeDashboard /></EmployeeProtectedRoute>} />
+          <Route path='/employee-profile' element={<EmployeeProtectedRoute><EmployeeProfile /></EmployeeProtectedRoute>} />
+          <Route path='/manage-users' element={<EmployeeProtectedRoute><ManageUsers /></EmployeeProtectedRoute>} />
+          {/*<Route path='/manage-applications' element={<EmployeeProtectedRoute><ManageApplications /></EmployeeProtectedRoute>} />
+          <Route path='/employee-reports' element={<EmployeeProtectedRoute><Reports /></EmployeeProtectedRoute>} />
+          <Route path='/employee-settings' element={<EmployeeProtectedRoute><Settings /></EmployeeProtectedRoute>} /> */}
         </Routes>
 
         <Footer />
