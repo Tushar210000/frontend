@@ -370,7 +370,7 @@ export default function Janarogycard() {
       try {
         const token = localStorage.getItem("token");
         const res = await fetch(
-          https://backendnow-pem2.onrender.com/api/services/janarogya/check",
+          "https://backendnow-pem2.onrender.com/api/services/janarogya/check",
           {
             method: "GET",
             headers: {
@@ -413,7 +413,7 @@ export default function Janarogycard() {
   const token = localStorage.getItem("token");
   if (!token) return; // ✅ skip if not logged in
 
-  fetch(https://backendnow-pem2.onrender.com/api/auth/profile", {
+  fetch("https://backendnow-pem2.onrender.com/api/auth/profile", {
     headers: { Authorization: `Bearer ${token}` },
   })
     .then((res) => res.json())
@@ -521,7 +521,7 @@ export default function Janarogycard() {
       try {
         const token = localStorage.getItem("token");
         const res = await fetch(
-          https://backendnow-pem2.onrender.com/api/services/janarogya/user/apply",
+          "https://backendnow-pem2.onrender.com/api/services/janarogya/user/apply",
           {
             method: "POST",
             headers: { Authorization: `Bearer ${token}` },
