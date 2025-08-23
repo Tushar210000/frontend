@@ -13,7 +13,7 @@ const Arogaycardpage = () => {
   useEffect(() => {
     const fetchStatus = async () => {
       try {
-        const res = await axios.get("https://ruwa-back-2.onrender.com/api/services/janarogya/check", {
+        const res = await axios.get(https://backendnow-pem2.onrender.com/api/services/janarogya/check", {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
         });
         setMsg(res.data.msg);

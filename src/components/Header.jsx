@@ -1362,7 +1362,7 @@ export default function Header() {
 
     try {
       const response = await axios.post(
-        "https://ruwa-back-2.onrender.com/api/auth/register",
+        https://backendnow-pem2.onrender.com/api/auth/register",
         {
           name: registerData.name,
           phone: registerData.phone,

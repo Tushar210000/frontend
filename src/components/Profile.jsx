@@ -88,7 +88,7 @@ export default function Profile() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch("https://ruwa-back-2.onrender.com/api/u/summary", {
+        const res = await fetch(https://backendnow-pem2.onrender.com/api/u/summary", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -118,7 +118,7 @@ export default function Profile() {
   const handleToggleEdit = async () => {
     if (editable) {
       try {
-        const res = await fetch("https://ruwa-back-2.onrender.com/api/user/put", {
+        const res = await fetch(https://backendnow-pem2.onrender.com/api/user/put", {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
