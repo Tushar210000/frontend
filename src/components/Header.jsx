@@ -720,7 +720,7 @@
 //     }
 
 //     try {
-//       const response = await axios.post('"https://backendnow-pem2.onrender.com/api/auth/register', {
+//       const response = await axios.post('https://backendnow-pem2.onrender.com/api/auth/register', {
 //         name: registerData.name,
 //         phone: registerData.phone,
 //         password: registerData.password,

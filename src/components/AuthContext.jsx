@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   // Function to get the user profile
   const getProfile = async (token) => {
     try {
-      const response = await axios.get('"https://backendnow-pem2.onrender.com/api/auth/profile', {
+      const response = await axios.get('https://backendnow-pem2.onrender.com/api/auth/profile', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -42,10 +42,11 @@ export const AuthProvider = ({ children }) => {
         : { employeeId: identifier, password };
 
       const response = await axios.post('https://backendnow-pem2.onrender.com/api/auth/login', payload);
-
+   console.log(response)
       const { token } = response.data;
+      console.log(token)
       localStorage.setItem('token', token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      
 
       // Fetch the user profile immediately after successful login
       const userData = await getProfile(token);
