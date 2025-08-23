@@ -720,7 +720,7 @@
 //     }
 
 //     try {
-//       const response = await axios.post('http://localhost:8000/api/auth/register', {
+//       const response = await axios.post('https://ruwa-back-2.onrender.com/api/auth/register', {
 //         name: registerData.name,
 //         phone: registerData.phone,
 //         password: registerData.password,
@@ -1359,9 +1359,10 @@ export default function Header() {
       return;
     }
 
+
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/auth/register",
+        "https://ruwa-back-2.onrender.com/api/auth/register",
         {
           name: registerData.name,
           phone: registerData.phone,
