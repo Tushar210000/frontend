@@ -394,7 +394,7 @@ export default function EmployeeProfile() {
     address: "",
     profilePic: "",
   });
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [saveAnimation, setSaveAnimation] = useState(false);
 
   // Mock API call simulation
@@ -403,7 +403,7 @@ export default function EmployeeProfile() {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
-          setLoading(false);
+          // setLoading(false);
           return;
         }
         const res = await fetch("https://backendnow-pem2.onrender.com/api/employee/profile", {
@@ -428,10 +428,10 @@ export default function EmployeeProfile() {
         } else {
           console.error(data.message);
         }
-        setLoading(false);
+        // setLoading(false);
       } catch (err) {
         console.error("Error fetching profile:", err);
-        setLoading(false);
+        // setLoading(false);
       }
     };
     fetchEmployeeData();
@@ -467,39 +467,39 @@ export default function EmployeeProfile() {
     });
   };
 
-  if (loading) {
-    return (
-      <>
-        <link
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-        />
-        <div
-          style={{
-            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-            minHeight: "100vh",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div className="text-center">
-            <div
-              className="spinner-border text-light mb-4"
-              style={{ width: "4rem", height: "4rem" }}
-              role="status"
-            >
-              <span className="visually-hidden">Loading...</span>
-            </div>
-            <h3 className="text-white mb-2">Loading Your Profile</h3>
-            <p className="text-white-50">
-              Please wait while we fetch your information...
-            </p>
-          </div>
-        </div>
-      </>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <>
+  //       <link
+  //         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  //         rel="stylesheet"
+  //       />
+  //       <div
+  //         style={{
+  //           background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+  //           minHeight: "100vh",
+  //           display: "flex",
+  //           alignItems: "center",
+  //           justifyContent: "center",
+  //         }}
+  //       >
+  //         <div className="text-center">
+  //           <div
+  //             className="spinner-border text-light mb-4"
+  //             style={{ width: "4rem", height: "4rem" }}
+  //             role="status"
+  //           >
+  //             <span className="visually-hidden">Loading...</span>
+  //           </div>
+  //           <h3 className="text-white mb-2">Loading Your Profile</h3>
+  //           <p className="text-white-50">
+  //             Please wait while we fetch your information...
+  //           </p>
+  //         </div>
+  //       </div>
+  //     </>
+  //   );
+  // }
 
   return (
     <>

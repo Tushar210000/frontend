@@ -1100,7 +1100,7 @@ import React, { useState, useEffect } from 'react';
 
 export default function ManageUsers() {
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
@@ -1112,11 +1112,11 @@ export default function ManageUsers() {
 
   // API Base URL - adjust according to your backend
   
-
+const exportToCSV=()=>{}
   // Fetch users from API
   const fetchUsers = async () => {
     try {
-      setLoading(true);
+      // setLoading(true);
       const token = localStorage.getItem('token'); // Adjust based on your token storage
       const response = await fetch(`https://backendnow-pem2.onrender.com/api/employee/applied-by-me`, {
         method: 'GET',
@@ -1141,7 +1141,7 @@ export default function ManageUsers() {
       // Fallback to mock data
       
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
@@ -1305,32 +1305,32 @@ const deleteUser=()=>{}
   //   document.body.removeChild(a);
   //   showNotification('Users exported successfully', 'success');
   // };
-const exportToCSV=()=>{}
-  if (loading) {
-    return (
-      <>
-        <link 
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
-          rel="stylesheet" 
-        />
-        <link 
-          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" 
-          rel="stylesheet" 
-        />
+// const exportToCSV=()=>{}
+//   if (loading) {
+//     return (
+//       <>
+//         <link 
+//           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+//           rel="stylesheet" 
+//         />
+//         <link 
+//           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" 
+//           rel="stylesheet" 
+//         />
         
-        <div className="min-vh-100 d-flex align-items-center justify-content-center" 
-             style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
-          <div className="text-center text-white">
-            <div className="spinner-border mb-4" role="status" style={{ width: '3rem', height: '3rem' }}>
-              <span className="visually-hidden">Loading...</span>
-            </div>
-            <h4>Loading users...</h4>
-            <p className="mb-0 opacity-75">Please wait while we fetch the user data</p>
-          </div>
-        </div>
-      </>
-    );
-  }
+//         <div className="min-vh-100 d-flex align-items-center justify-content-center" 
+//              style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+//           <div className="text-center text-white">
+//             <div className="spinner-border mb-4" role="status" style={{ width: '3rem', height: '3rem' }}>
+//               <span className="visually-hidden">Loading...</span>
+//             </div>
+//             <h4>Loading users...</h4>
+//             <p className="mb-0 opacity-75">Please wait while we fetch the user data</p>
+//           </div>
+//         </div>
+//       </>
+//     );
+//   }
 
   return (
     <>
